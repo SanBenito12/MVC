@@ -1,0 +1,3 @@
+<?php
+// Modelo de conexión
+?> 

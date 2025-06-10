@@ -1,0 +1,3 @@
+<?php
+// Endpoints de autenticación
+?> 
