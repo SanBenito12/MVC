@@ -367,3 +367,213 @@ textarea {
         opacity: 1;
     }
 }
+
+/* Estilos adicionales para Cursos Disponibles y Mis Compras */
+
+.curso-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    height: 100%;
+}
+
+.curso-info h3 {
+    color: #333;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.curso-info p {
+    color: #666;
+    font-size: 1rem;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.curso-imagen {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.curso-imagen:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.curso-imagen img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.curso-precio {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.precio {
+    background: linear-gradient(45deg, #56cc9d, #6be585);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    box-shadow: 0 8px 25px rgba(86, 204, 157, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.curso-compra {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.curso-compra .btn {
+    width: 100%;
+    justify-content: center;
+    font-size: 1.1rem;
+    padding: 18px 30px;
+}
+
+.curso-compra-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+    padding: 20px;
+    background: linear-gradient(45deg, rgba(86, 204, 157, 0.1), rgba(107, 229, 133, 0.1));
+    border-radius: 12px;
+    border: 2px solid rgba(86, 204, 157, 0.2);
+}
+
+.precio-pagado, .fecha-compra {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.precio-pagado i {
+    color: #56cc9d;
+    font-size: 1.2rem;
+}
+
+.fecha-compra i {
+    color: #667eea;
+    font-size: 1.2rem;
+}
+
+.precio-pagado {
+    font-size: 1.2rem;
+    color: #56cc9d;
+}
+
+/* Badge de estado para compras */
+.curso-comprado {
+    position: relative;
+}
+
+.curso-comprado::after {
+    content: 'ADQUIRIDO';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(45deg, #56cc9d, #6be585);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(86, 204, 157, 0.3);
+}
+
+/* Animación especial para cursos disponibles */
+.curso-disponible {
+    position: relative;
+    overflow: hidden;
+}
+
+.curso-disponible::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #667eea, #764ba2, #56cc9d, #6be585);
+    border-radius: 22px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.curso-disponible:hover::before {
+    opacity: 1;
+}
+
+.curso-disponible:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+/* Responsive adicional */
+@media (max-width: 768px) {
+    .curso-imagen img {
+        height: 150px;
+    }
+    
+    .curso-info h3 {
+        font-size: 1.2rem;
+    }
+    
+    .precio {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+    }
+    
+    .curso-compra-info {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Efecto hover mejorado para botones de compra */
+.curso-compra .btn-primary:hover {
+    background: linear-gradient(45deg, #764ba2, #667eea);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+}
+
+/* Separador visual entre secciones */
+.courses-header + .courses-header {
+    margin-top: 50px;
+}
+
+.courses-grid + .courses-header {
+    margin-top: 50px;
+}

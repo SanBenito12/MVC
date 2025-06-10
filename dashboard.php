@@ -159,6 +159,28 @@ if ($cred["status"] !== 200 || count($cred["body"]) === 0) {
         }
     }
 
+    // Comprar curso (NUEVA SECCIÓN AGREGADA)
+    if (isset($_POST['comprar_curso_id'])) {
+        $curso_id = intval($_POST['comprar_curso_id']);
+
+        // Obtener info del curso para saber el precio
+        $resCurso = supabaseRequest("cursos?id=eq.$curso_id", "GET");
+        if ($resCurso["status"] === 200 && count($resCurso["body"]) > 0) {
+            $curso = $resCurso["body"][0];
+
+            $compra = [
+                "id_cliente" => $id_creador,
+                "id_curso" => $curso_id,
+                "precio_pagado" => $curso["precio"],
+                "fecha_compra" => date("c")
+            ];
+
+            $resCompra = supabaseRequest("compras", "POST", $compra);
+
+            $mensaje = ($resCompra["status"] === 201) ? "Curso comprado exitosamente 🎉" : "Error al registrar compra.";
+        }
+    }
+
     // Preparar formulario de edición
     if (isset($_GET['editar'])) {
         $editando = true;
@@ -176,6 +198,20 @@ if ($cred["status"] !== 200 || count($cred["body"]) === 0) {
     $resCursos = supabaseRequest("cursos?select=*&id_creador=eq." . $id_creador, "GET");
     if ($resCursos["status"] === 200) {
         $cursos = $resCursos["body"];
+    }
+
+    // Obtener cursos disponibles (todos los cursos excepto los que el cliente ya compró)
+    $cursosDisponibles = [];
+    $resCursosTodos = supabaseRequest("cursos?select=*", "GET");
+
+    // Obtener sus compras para filtrar
+    $resCompras = supabaseRequest("compras?select=id_curso&id_cliente=eq.$id_creador", "GET");
+    $comprados = array_column($resCompras["body"] ?? [], 'id_curso');
+
+    foreach ($resCursosTodos["body"] ?? [] as $curso) {
+        if (!in_array($curso['id'], $comprados)) {
+            $cursosDisponibles[] = $curso;
+        }
     }
 }
 ?>
@@ -346,6 +382,73 @@ if ($cred["status"] !== 200 || count($cred["body"]) === 0) {
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+
+        <!-- Cursos Disponibles para Comprar -->
+        <div class="courses-header">
+            <h2>
+                <i class="fas fa-shopping-cart"></i>
+                Cursos Disponibles para Comprar
+            </h2>
+        </div>
+        
+        <div class="courses-grid">
+            <?php foreach ($cursosDisponibles as $curso): ?>
+                <div class="curso">
+                    <div class="curso-info">
+                        <h3><?= htmlspecialchars($curso['titulo']) ?></h3>
+                        <p><?= htmlspecialchars($curso['descripcion']) ?></p>
+                        <div class="curso-imagen">
+                            <img src="<?= htmlspecialchars($curso['imagen']) ?>" alt="<?= htmlspecialchars($curso['titulo']) ?>">
+                        </div>
+                        <div class="curso-precio">
+                            <span class="precio">$<?= number_format($curso['precio'], 2) ?></span>
+                        </div>
+                    </div>
+                    <form method="POST" class="curso-compra">
+                        <input type="hidden" name="comprar_curso_id" value="<?= $curso['id'] ?>">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i> Comprar
+                        </button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Mis Compras -->
+        <div class="courses-header">
+            <h2>
+                <i class="fas fa-receipt"></i>
+                Mis Compras
+            </h2>
+        </div>
+        
+        <div class="courses-grid">
+            <?php
+            $resHistorial = supabaseRequest("compras?select=*,cursos(*)&id_cliente=eq.$id_creador", "GET");
+            foreach ($resHistorial["body"] ?? [] as $compra):
+                $curso = $compra["cursos"];
+            ?>
+                <div class="curso">
+                    <div class="curso-info">
+                        <h3><?= htmlspecialchars($curso['titulo']) ?></h3>
+                        <p><?= htmlspecialchars($curso['descripcion']) ?></p>
+                        <div class="curso-imagen">
+                            <img src="<?= htmlspecialchars($curso['imagen']) ?>" alt="<?= htmlspecialchars($curso['titulo']) ?>">
+                        </div>
+                        <div class="curso-compra-info">
+                            <div class="precio-pagado">
+                                <i class="fas fa-check-circle"></i>
+                                Pagado: $<?= number_format($compra['precio_pagado'], 2) ?>
+                            </div>
+                            <div class="fecha-compra">
+                                <i class="fas fa-calendar"></i>
+                                Fecha: <?= date("d/m/Y", strtotime($compra['fecha_compra'])) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
 
     </div>
 
