@@ -1,3 +1,9 @@
 <?php
-// require_once("controladores/rutas.controlador.php");
-echo "<h1>Página de inicio temporal</h1>";
+session_start();
+
+if (isset($_SESSION['id_cliente']) && isset($_SESSION['llave_secreta'])) {
+    header("Location: dashboard.php");
+} else {
+    header("Location: login.php");
+}
+exit;

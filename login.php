@@ -44,27 +44,78 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Login PHP</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        input, button { margin-top: 10px; padding: 8px; width: 300px; }
-        .curso { margin-top: 15px; border: 1px solid #ccc; padding: 10px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - MVC SISTEMA</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="assets/css/estiloslog.css" rel="stylesheet">
 </head>
 <body>
 
-    <h2>Iniciar sesión</h2>
-    <form method="POST">
-        <input type="email" name="email" required placeholder="Correo electrónico"><br>
-        <button type="submit">Ver mis cursos</button>
-    </form>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>
+                <i class="fas fa-graduation-cap"></i>
+                MvC SISTEMA
+            </h1>
+            <p>Accede a tus cursos</p>
+        </div>
 
-    <?php if ($mensaje): ?>
-        <p style="color:red;"><?= htmlspecialchars($mensaje) ?></p>
-    <?php endif; ?>
+        <div class="register-link">
+            <p><a href="registro.php">¿No tienes cuenta? Regístrate aquí</a></p>
+        </div>
+
+        <form method="POST" class="login-form">
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i>
+                    Correo Electrónico
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    required 
+                    placeholder="Ingresa tu correo electrónico"
+                    autocomplete="email"
+                >
+            </div>
+
+            <button type="submit" class="login-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                Acceder a mis cursos
+            </button>
+        </form>
+
+        <?php if ($mensaje): ?>
+            <div class="mensaje-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <?= htmlspecialchars($mensaje) ?>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <script>
+        // Agregar efecto de carga al enviar el formulario
+        document.querySelector('.login-form').addEventListener('submit', function() {
+            const container = document.querySelector('.login-container');
+            container.classList.add('loading');
+        });
+
+        // Efecto de focus mejorado
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
 
 </body>
 </html>

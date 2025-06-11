@@ -32,10 +32,10 @@ function supabaseRequest($endpoint, $method = "GET", $data = null) {
     $error = curl_error($curl);
     curl_close($curl);
 
-    // 🔍 Depuración temporal (comenta esto en producción)
-    if ($error) {
-        echo "❌ cURL error: " . $error . "<br>";
-    }
+    // // 🔍 Depuración temporal (comenta esto en producción)
+    // if ($error) {
+    //     echo "❌ cURL error: " . $error . "<br>";
+    // }
 
     return [
         "status" => $httpcode,
